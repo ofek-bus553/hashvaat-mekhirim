@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#2E7D4F">
+<title>השוואת מחירי סופר - 23.9.2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F7F5EF; --card:#FFFFFF; --ink:#1F2A1F; --muted:#6B7268;
+  --green:#2E7D4F; --green-dark:#1E5C38; --green-soft:#E4F0E7;
+  --gold:#B98A1E; --gold-soft:#FBF3DC;
+  --line:#E7E3D8; --chip:#F0EDE2;
+  --shadow:0 2px 12px rgba(40,50,30,.08);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{font-size:17px}
+body{font-family:'Heebo',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55;}
+header{background:linear-gradient(135deg,var(--green) 0%,var(--green-dark) 100%);color:#fff;padding:1.6rem 1rem 1.3rem;text-align:center;}
+header h1{font-size:1.55rem;font-weight:900;letter-spacing:-.01em;}
+header .date{display:inline-block;background:rgba(255,255,255,.18);border-radius:999px;padding:.15rem .85rem;font-size:.85rem;font-weight:700;margin-top:.5rem;}
+header .src{font-size:.78rem;opacity:.85;margin-top:.45rem;line-height:1.4;}
+.wrap{max-width:720px;margin:0 auto;padding:0 .8rem 3rem;}
+.tabs{display:flex;gap:.5rem;margin:1rem 0 .2rem;}
+.tabs button{flex:1;border:2px solid var(--green);background:var(--card);color:var(--green-dark);border-radius:12px;padding:.6rem .3rem;font-family:inherit;font-size:1rem;font-weight:800;cursor:pointer;}
+.tabs button[aria-pressed="true"]{background:var(--green);color:#fff;}
+.panel{display:none;}
+.panel.open{display:block;}
+.winner{background:linear-gradient(135deg,var(--gold-soft),#fff);border:2px solid var(--gold);border-radius:16px;padding:1rem 1.1rem;margin:1rem 0;box-shadow:var(--shadow);}
+.winner .crown{font-size:.8rem;font-weight:800;color:var(--gold);}
+.winner .name{font-size:1.3rem;font-weight:900;margin:.1rem 0;}
+.winner .price{font-size:1.8rem;font-weight:900;color:var(--green-dark);}
+.winner .save{font-size:.85rem;color:var(--muted);margin-top:.15rem;}
+.card{background:var(--card);border-radius:16px;box-shadow:var(--shadow);padding:1rem 1rem 1.1rem;margin:1rem 0;}
+.card h2{font-size:1.05rem;font-weight:800;margin-bottom:.7rem;}
+.card h2 .sub{font-weight:500;font-size:.78rem;color:var(--muted);}
+.rankrow{display:flex;align-items:center;gap:.6rem;padding:.45rem 0;border-bottom:1px solid var(--line);}
+.rankrow:last-child{border-bottom:none;}
+.rankrow .num{flex:0 0 1.5rem;height:1.5rem;border-radius:50%;background:var(--chip);color:var(--muted);font-size:.8rem;font-weight:800;display:flex;align-items:center;justify-content:center;}
+.rankrow.first .num{background:var(--gold);color:#fff;}
+.rankrow .info{flex:0 0 9.2rem;min-width:0;}
+.rankrow .store{font-weight:700;font-size:.92rem;line-height:1.25;}
+.rankrow .branch{font-size:.7rem;color:var(--muted);line-height:1.25;}
+.rankrow .bar{flex:1;height:.55rem;background:var(--chip);border-radius:999px;overflow:hidden;}
+.rankrow .bar i{display:block;height:100%;background:var(--green);border-radius:999px;opacity:.75;}
+.rankrow.first .bar i{background:var(--gold);opacity:1;}
+.rankrow .amount{flex:0 0 4.6rem;text-align:left;font-weight:800;font-size:.95rem;}
+.rankrow .diff{display:block;font-size:.68rem;color:var(--muted);font-weight:500;}
+.rankrow.first .diff{color:var(--gold);font-weight:800;}
+.peastoggle{display:flex;gap:.5rem;margin:.2rem 0 .1rem;}
+.peastoggle button{flex:1;border:1.5px solid var(--line);background:var(--card);border-radius:10px;padding:.45rem .3rem;font-family:inherit;font-size:.82rem;font-weight:700;color:var(--muted);cursor:pointer;}
+.peastoggle button[aria-pressed="true"]{border-color:var(--green);color:var(--green-dark);background:var(--green-soft);}
+.note{font-size:.75rem;color:var(--muted);margin-top:.5rem;line-height:1.45;}
+.tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line);border-radius:12px;}
+table{border-collapse:collapse;width:100%;font-size:.82rem;}
+th,td{padding:.5rem .55rem;text-align:center;border-bottom:1px solid var(--line);white-space:nowrap;}
+thead th{background:var(--green);color:#fff;font-size:.75rem;font-weight:800;position:sticky;top:0;}
+tbody tr:last-child td{border-bottom:none;}
+td.item,th.item{text-align:right;position:sticky;right:0;background:var(--card);font-weight:700;min-width:7.5rem;max-width:9rem;white-space:normal;line-height:1.3;box-shadow:-2px 0 4px rgba(0,0,0,.04);}
+thead th.item{background:var(--green);z-index:2;}
+tbody tr:nth-child(even) td{background:#FBFAF5;}
+tbody tr:nth-child(even) td.item{background:#FBFAF5;}
+td .u{display:block;font-size:.65rem;color:var(--muted);font-weight:400;}
+td.best{background:var(--green-soft)!important;font-weight:900;color:var(--green-dark);border-radius:6px;}
+td.na{color:var(--muted);font-weight:400;}
+td.peasrow{background:var(--gold-soft)!important;}
+td.peasrow.item{background:var(--gold-soft)!important;}
+.othercard{border:1.5px solid var(--line);border-radius:12px;padding:.7rem .9rem;margin:.5rem 0;background:var(--card);}
+.othercard .st{font-weight:800;font-size:.95rem;}
+.othercard .det{font-size:.8rem;color:var(--muted);margin-top:.1rem;line-height:1.45;}
+.caveats{background:var(--card);border-radius:16px;box-shadow:var(--shadow);padding:1rem 1.1rem;margin:1rem 0;}
+.caveats h2{font-size:1rem;font-weight:800;margin-bottom:.5rem;}
+.caveats li{font-size:.82rem;color:var(--muted);margin:.3rem 0;line-height:1.5;list-style:none;padding-right:1.1rem;position:relative;}
+.caveats li::before{content:'•';position:absolute;right:0;color:var(--green);}
+footer{text-align:center;font-size:.72rem;color:var(--muted);margin-top:1.5rem;line-height:1.5;}
+@media (max-width:420px){
+  .rankrow .info{flex-basis:7.6rem;}
+  .rankrow .amount{flex-basis:4rem;font-size:.88rem;}
+  html{font-size:16px}
+}
+</style>
+</head>
+<body>
+<header>
+  <h1>🛒 השוואת מחירי סופר</h1>
+  <div class="date">23 בספטמבר 2026</div>
+  <div class="src">מבוסס על קבצי מחירים רשמיים של הרשתות ליום 23.9.2026<br>מחירי מדף רגילים - בלי מבצעי מועדון ובלי רבגוניות</div>
+</header>
+<div class="wrap">
+  <div class="tabs" role="tablist">
+    <button id="tab1" role="tab" aria-pressed="true" onclick="showPanel(1)">🧺 סל מלא</button>
+    <button id="tab2" role="tab" aria-pressed="false" onclick="showPanel(2)">🥬 ירקות ופירות</button>
+  </div>
+
+  <!-- ============ PANEL 1: FULL BASKET ============ -->
+  <div class="panel open" id="panel1">
+    <div class="winner" id="winner1"></div>
+    <div class="card">
+      <h2>דירוג הרשתות <span class="sub">- 18 פריטים זהים</span></h2>
+      <div class="peastoggle">
+        <button id="peasOff" aria-pressed="true" onclick="setPeas(false)">בלי אפונה קפואה</button>
+        <button id="peasOn" aria-pressed="false" onclick="setPeas(true)">עם אפונה סנפרוסט 800 גרם</button>
+      </div>
+      <div id="ranking1"></div>
+      <div class="note" id="peasNote" style="display:none">אושר עד לא מחזיק אפונה סנפרוסט 800 גרם, ולכן לא נכלל בדירוג הזה. בסל בלי האפונה הוא הזול ביותר.</div>
+    </div>
+    <div class="card">
+      <h2>מחיר לפריט <span class="sub">- הזול בכל שורה מסומן בירוק</span></h2>
+      <div class="tablewrap"><table id="itemsTable"></table></div>
+      <div class="note">ברקת הזיתים (הזיתים 96 ג"ש) נמדד בסיכום הסל בלבד - פירוט המחירים לפריט לא נכלל בנתונים. גלולו ימינה ושמאלה לכל הרשתות.</div>
+    </div>
+  </div>
+
+  <!-- ============ PANEL 2: PRODUCE ============ -->
+  <div class="panel" id="panel2">
+    <div class="winner" id="winner2"></div>
+    <div class="card">
+      <h2>דירוג הרשתות <span class="sub">- 18 פריטי ירקות ופירות לפי ק"ג</span></h2>
+      <div id="ranking2"></div>
+      <div class="note">על 11 הירקות והפירות הבסיסיים בלבד, אושר עד דווקא הזול (70.90 מול 72.90 ביוחננוף) - יוחננוף מנצח רק בזכות הפריטים הנוספים.</div>
+    </div>
+    <div class="card">
+      <h2>הפריטים הנוספים <span class="sub">- מחיר לק"ג, הזול מסומן בירוק</span></h2>
+      <div class="tablewrap"><table id="extraTable"></table></div>
+    </div>
+    <div class="card">
+      <h2>חנויות נוספות באזור</h2>
+      <div class="othercard">
+        <div class="st">נוי השדה, גבעת שמואל</div>
+        <div class="det">כ-277 ₪ לאותם 17 פריטים - כפול מהזולים בדירוג. חנות פרימיום. המחירים מאפליקציית Wolt ויכולים להיות גבוהים מהמדף בחנות.</div>
+      </div>
+      <div class="othercard">
+        <div class="st">ירק השדה, פתח תקווה (חיה פינשטיין 3)</div>
+        <div class="det">לא מפרסמים מחירים בשום מקום - אי אפשר להשוות בלי בדיקה פיזית בחנות.</div>
+      </div>
+      <div class="othercard">
+        <div class="st">חצי חינם, אם המושבות (ראשון לציון 1)</div>
+        <div class="det">מפרסמים קבצי מחירים, אבל קובץ הירקות והפירות של אותו יום חסר - לא ניתן לתמחר.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="caveats">
+    <h2>חשוב לדעת ⚠️</h2>
+    <ul>
+      <li>המחירים מקבצי המחירים הרשמיים שהרשתות חייבות לפרסם, ליום 23.9.2026, ומשקפים מחיר מדף רגיל.</li>
+      <li>לא נכללים: מבצעי מועדון, הנחות אשראי, מבצעי כמות כמו 2 במחיר מבצע ומחירי אונליין.</li>
+      <li>ירקות ופירות מתומחרים לפי ק"ג - הסל בפועל תלוי במשקל שבאמת קונים.</li>
+      <li>המחירים משתנים מדי יום - מה שזול היום לא בהכרח זול מחר.</li>
+      <li>ברקת הזיתים מופיע בסיכום הסל בלבד; נוי השדה לפי מחירי Wolt; ירק השדה לא ניתן לאימות.</li>
+    </ul>
+  </div>
+  <footer>נבנה עבור עופרי ואופק 🥗<br>השוואה בין סניפים באזור פתח תקווה - גבעת שמואל</footer>
+</div>
+
+<script>
+// ================= DATA (23.9.2026 official price files, shelf prices) =================
+const STORES = [
+  {id:'osher',  name:'אושר עד',    branch:'סגולה, בן ציון גליס 30 פ"ת'},
+  {id:'rami',   name:'רמי לוי',    branch:'הסיבים 37'},
+  {id:'yoh',    name:'יוחננוף',    branch:'סגולה, בן ציון גליס 22'},
+  {id:'shuf',   name:'שופרסל דיל', branch:'אליעזר פרידמן 9'},
+  {id:'carr',   name:'קרפור מרקט', branch:'בר כוכבא 63'},
+  {id:'haviv',  name:'חביב',       branch:'העצמאות 106'},
+  {id:'bsiti',  name:'ברקת סיטי',  branch:'בן גוריון 11, גבעת שמואל'},
+  {id:'bzeitim',name:'ברקת הזיתים',branch:'הזיתים 96, גבעת שמואל'},
+];
+// per-item columns (ברקת הזיתים has totals only):
+const COLS = ['osher','rami','yoh','shuf','carr','haviv','bsiti'];
+const ITEMS1 = [
+  ['ביצים 18 גדולות','',[21.30,21.30,21.36,21.36,21.36,21.36,21.36]],
+  ['מלפפון','לק"ג',[6.90,6.90,5.90,6.90,7.90,8.90,6.90]],
+  ['עגבניה','לק"ג',[6.90,5.90,5.90,5.90,8.90,8.90,6.90]],
+  ['פטרוזיליה','חבילה',[1.90,4.90,3.90,3.90,3.90,3.90,4.90]],
+  ['כוסברה','חבילה',[4.90,4.90,3.90,3.90,4.90,3.90,4.90]],
+  ['גמבה אדומה','לק"ג',[8.90,8.90,8.90,8.90,10.90,11.90,9.90]],
+  ['גזר ארוז','לק"ג',[3.90,3.90,3.90,4.90,4.90,5.90,4.90]],
+  ['מנגו','לק"ג',[11.90,12.90,12.90,16.90,14.90,14.90,16.90]],
+  ['בצל יבש','לק"ג',[4.90,4.50,4.90,4.90,4.90,5.90,4.90]],
+  ['לימון','לק"ג',[7.90,8.90,8.90,10.90,9.90,8.90,9.90]],
+  ['חסה ערבית','',[3.90,7.90,4.90,4.90,4.90,4.90,5.90]],
+  ['קישוא','לק"ג',[8.90,8.90,8.90,9.90,9.90,11.90,6.90]],
+  ['אורז עגול סוגת','לק"ג',[11.50,11.90,11.90,12.90,12.90,12.90,13.90]],
+  ['אורז פרסי סוגת','לק"ג',[11.50,11.70,11.90,11.90,11.90,11.90,11.90]],
+  ['טופו','',[10.90,10.90,10.90,12.90,13.10,14.90,12.90]],
+  ['חזה עוף טרי','לק"ג',[29.90,34.90,36.90,39.90,39.90,49.90,49.90]],
+  ['בקר טחון קפוא','ל-500 גרם',[18.71,19.50,27.90,22.90,27.45,20.45,19.95]],
+  ['פולפה MUTTI','פחית 400 גרם',[6.63,6.90,6.63,8.63,8.00,8.63,8.30]],
+];
+const TOFU_NOTE=['300 גרם','300 גרם','300 גרם','300 גרם','300 גרם','345 גרם (מוגדל)','345 גרם'];
+const POLPA_NOTE=['משולש','','משולש','משולש','','משולש','משולש'];
+const PEAS = ['אפונה סנפרוסט 800 גרם',[null,18.90,16.90,17.90,19.10,19.90,19.90]];
+const TOTALS_NO_PEAS = {osher:181.34, rami:195.60, yoh:200.39, shuf:212.39, carr:220.51, bsiti:221.11, haviv:229.94, bzeitim:240.11};
+const TOTALS_PEAS    = {rami:214.50, yoh:217.29, shuf:230.29, carr:239.61, bsiti:241.01, haviv:249.84, bzeitim:259.01};
+const TOTALS2 = {yoh:126.20, osher:127.20, rami:132.80, shuf:146.20, bsiti:148.20, carr:152.20, haviv:156.20, bzeitim:183.20};
+const EXTRA2 = [
+  ['תפוחי אדמה לבנים',[6.90,4.90,4.90,5.90,4.90,5.90,4.90]],
+  ['בטטה',[5.90,6.90,6.90,8.90,8.90,9.90,9.90]],
+  ['חציל',[6.90,6.90,6.90,7.90,9.90,8.90,5.90]],
+  ['בננה',[9.90,9.90,9.90,10.90,9.90,11.90,11.90]],
+  ['תפוח',[10.90,9.90,9.90,12.90,12.90,9.90,10.90]],
+  ['תפוז',[6.90,5.90,5.90,7.90,7.90,6.90,6.90]],
+  ['אבוקדו',[8.90,9.90,8.90,9.90,11.90,12.90,14.90]],
+];
+// ================= RENDER =================
+const storeById = id => STORES.find(s=>s.id===id);
+function renderRanking(elId, totals){
+  const rows = Object.entries(totals).sort((a,b)=>a[1]-b[1]);
+  const min = rows[0][1], max = rows[rows.length-1][1];
+  document.getElementById(elId).innerHTML = rows.map(([id,price],i)=>{
+    const st = storeById(id);
+    const diff = i===0 ? 'הזול ביותר 🏆' : '+'+(price-min).toFixed(2)+' ₪';
+    const w = 30 + 70*(price-min)/Math.max(1,(max-min));
+    return `<div class="rankrow${i===0?' first':''}">
+      <span class="num">${i+1}</span>
+      <span class="info"><span class="store">${st.name}</span><br><span class="branch">${st.branch}</span></span>
+      <span class="bar"><i style="width:${w.toFixed(0)}%"></i></span>
+      <span class="amount">${price.toFixed(2)} ₪<span class="diff">${diff}</span></span>
+    </div>`;
+  }).join('');
+}
+function renderWinner(elId, totals, text){
+  const rows = Object.entries(totals).sort((a,b)=>a[1]-b[1]);
+  const [id,price] = rows[0], second = rows[1];
+  const st = storeById(id), st2 = storeById(second[0]);
+  document.getElementById(elId).innerHTML = `
+    <div class="crown">🏆 הזול ביותר</div>
+    <div class="name">${st.name} <span style="font-weight:500;font-size:.85rem;color:var(--muted)">${st.branch}</span></div>
+    <div class="price">${price.toFixed(2)} ₪</div>
+    <div class="save">חיסכון של ${(second[1]-price).toFixed(2)} ₪ מול ${st2.name} (מקום 2) · ${text}</div>`;
+}
+function renderTable(elId, items, noteCols){
+  let html = '<thead><tr><th class="item">פריט</th>' + COLS.map(id=>`<th>${storeById(id).name}</th>`).join('') + '</tr></thead><tbody>';
+  items.forEach((row,ri)=>{
+    const [name, unit, prices] = row;
+    const valid = prices.filter(p=>p!=null);
+    const min = Math.min(...valid);
+    html += `<tr><td class="item">${name}${unit?`<span class="u">${unit}</span>`:''}</td>` +
+      prices.map((p,ci)=>{
+        if(p==null) return '<td class="na">אין</td>';
+        const note = noteCols && noteCols[ri] && noteCols[ri][ci] ? `<span class="u">${noteCols[ri][ci]}</span>` : '';
+        return `<td class="${p===min?'best':''}">${p.toFixed(2)}${note}</td>`;
+      }).join('') + '</tr>';
+  });
+  document.getElementById(elId).innerHTML = html + '</tbody>';
+}
+// per-item notes for comparison 1
+const NOTES1 = ITEMS1.map(([name])=> name==='טופו' ? TOFU_NOTE : name.startsWith('פולפה') ? POLPA_NOTE : null);
+// ================= STATE =================
+let peas = false;
+function setPeas(on){
+  peas = on;
+  document.getElementById('peasOn').setAttribute('aria-pressed', on);
+  document.getElementById('peasOff').setAttribute('aria-pressed', !on);
+  document.getElementById('peasNote').style.display = on ? 'block' : 'none';
+  const totals = on ? TOTALS_PEAS : TOTALS_NO_PEAS;
+  renderRanking('ranking1', totals);
+  renderWinner('winner1', totals, on ? 'סל כולל אפונה' : 'סל של 18 פריטים');
+}
+function showPanel(n){
+  document.getElementById('panel1').classList.toggle('open', n===1);
+  document.getElementById('panel2').classList.toggle('open', n===2);
+  document.getElementById('tab1').setAttribute('aria-pressed', n===1);
+  document.getElementById('tab2').setAttribute('aria-pressed', n===2);
+}
+// peas row appended to the items table (gold highlight)
+const PEAS_ROW = [[PEAS[0],'קפוא',PEAS[1]]];
+renderTable('itemsTable', ITEMS1.concat(PEAS_ROW), NOTES1.concat([null]));
+renderTable('extraTable', EXTRA2.map(([n,p])=>[n,'לק"ג',p]), null);
+setPeas(false);
+renderRanking('ranking2', TOTALS2);
+renderWinner('winner2', TOTALS2, '18 פריטי ירקות ופירות');
+</script>
+</body>
+</html>
